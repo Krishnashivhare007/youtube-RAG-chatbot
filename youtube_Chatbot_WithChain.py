@@ -29,7 +29,7 @@ try:
 
     full_transcript = " ".join(transcript_parts)
     
-except:
+except TranscriptsDisabled:
     print("No captions available for this video.")
 
 
@@ -60,7 +60,6 @@ retriever = vector_store.as_retriever(
     search_kwargs={"k":4}
 )
 
-
 # Augmentation
 
 def format_docs(retrieved_docs):
@@ -71,8 +70,6 @@ parallel_chain = RunnableParallel({
     "context" : retriever | RunnableLambda(format_docs),
     "question" : RunnablePassthrough() 
 })
-
-# parallel_chain.invoke('According to the video, what is the most important strategy for achieving a high score in the IELTS Speaking test?')
 
 prompt = PromptTemplate(
     template= '''
